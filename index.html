@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Серебряная роса</title>
+    <style>
+        /* --- CSS СТИЛИ --- */
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: white;
+            background: url('https://raw.githubusercontent.com/stepatarkhanov-oss/aaa/main/задний%20фон.jpg') no-repeat center center fixed;
+            background-size: cover;
+            text-align: center;
+        }
+
+        /* Экран входа */
+        #welcome-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 1s ease;
+        }
+
+        #start-btn {
+            padding: 20px 40px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+            border-radius: 50px;
+            transition: 0.3s;
+            box-shadow: 0 0 15px rgba(255,255,255,0.2);
+        }
+
+        #start-btn:hover {
+            background: white;
+            color: black;
+            box-shadow: 0 0 30px white;
+        }
+
+        /* Кнопка управления музыкой в углу */
+        .fixed-btn {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 900;
+            padding: 10px 20px;
+            border-radius: 30px;
+            border: 1px solid rgba(255,255,255,0.3);
+            background: rgba(0, 0, 0, 0.6);
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+            backdrop-filter: blur(5px);
+            transition: 0.3s;
+        }
+
+        .fixed-btn:hover { background: rgba(255,255,255,0.2); }
+
+        header { background: rgba(0, 0, 0, 0.7); padding: 40px; }
+        h1 { font-size: 3.5rem; margin: 0; text-shadow: 2px 2px 10px black; }
+        h2 { background: rgba(0,0,0,0.4); display: inline-block; padding: 5px 25px; border-radius: 15px; margin-top: 30px; }
+
+        .grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 25px; padding: 40px; }
+
+        .card {
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            width: 240px;
+            transition: 0.3s;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .card:hover { transform: translateY(-8px); border-color: white; }
+        
+        /* Свечение при воспроизведении */
+        .card.playing { border-color: #00d4ff; box-shadow: 0 0 20px #00d4ff; }
+
+        img { width: 100%; height: 180px; object-fit: cover; }
+        p { padding: 15px; font-weight: bold; margin: 0; }
+    </style>
+</head>
+<body>
+
+    <div id="welcome-overlay">
+        <button id="start-btn">Интерактивная сказка</button>
+    </div>
+
+    <audio id="bg-music" loop>
+        <source src="https://raw.githubusercontent.com/stepatarkhanov-oss/aaa/main/фоновая%20музыка.mp3" type="audio/mpeg">
+    </audio>
+
+    <button id="play-bg" class="fixed-btn">⏸ Пауза музыки</button>
+
+    <header>
+        <h1>Серебряная роса</h1>
+    </header>
+
+    <main>
+        <section>
+            <h2>Локации</h2>
+            <div class="grid">
+                <div class="card" onclick="playVoice('loc1')">
+                    <img src="https://raw.githubusercontent.com/stepatarkhanov-oss/aaa/main/л1%20засуха.png" alt="Засуха">
+                    <p>Засуха</p>
+                    <audio id="loc1" src="https://raw.githubusercontent.com/stepatarkhanov-oss/aaa/main/озвучка%20л1.mp3"></audio>
+                </div>
+                <div class="card" onclick="playVoice('loc2')">
+                    <img src="https://raw.githubusercontent.com/stepatarkhanov-oss/aaa/main/л2%20Безмолвный%20поиск%20ответа.png" alt="Безмолвный поиск">
+                    <p>Безмолвный поиск ответа</p>
+                    <audio id="loc2" src="https://raw.githubusercontent.com/stepatarkhanov-oss/aaa/main/л2%20озвучка.mp3"></audio>
+                </div>
+                <div class="card" onclick="playVoice('loc3')">
+                    <img src="https://raw.githubusercontent.com/stepatarkhanov-oss/aaa/main/л3%20гордый%20затворник.png" alt="Гордый затворник">
+                    <p>Гордый затворник</p>
+                    <audio id="loc3" src="https://raw.githubusercontent.com/stepatarkhanov-oss/aaa/main/л3%20озвучка.mp3"></audio>
+                </div>
+                <div class="card" onclick="playVoice('loc4')">
+                    <img src="https://raw.githubusercontent.com/stepatarkhanov-oss/aaa/main/л4%20ночь%20тысячи%20песен.png" alt="Ночь тысячи песен">
+                    <p>Ночь тысячи песен</p>
+                    <audio id="loc4" src="https://raw.githubusercontent.com/stepatarkhanov-oss/aaa/main/л4%20озвучка.mp3"></audio>
+                </div>
+                <div class="card" onclick="playVoice('loc5')">
+                    <img src="https://raw.githubusercontent.com/stepatarkhanov-oss/aaa/main/л5%20серебряное%20чудо.png" alt="Серебряное чудо">
+                    <p>Серебряное чудо</p>
+                    <audio id="loc5" src="https://raw.githubusercontent.com/stepatarkhanov-oss/aaa/main/л5%20озвучка.mp3"></audio>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>Персонажи</h2>
+            <div class="grid">
+                <div class="card" onclick="playVoice('ivo')">
+                    <img src="https://raw.githubusercontent.com/stepatarkhanov-oss/aaa/main/Фото%20иво.jpg" alt="Иво">
+                    <p>Иво</p>
+                    <audio id="ivo" src="https://raw.githubusercontent.com/stepatarkhanov-oss/aaa/main/текст%20иво.mp3"></audio>
+                </div>
+                <div class="card" onclick="playVoice('bell')">
+                    <img src="https://raw.githubusercontent.com/stepatarkhanov-oss/aaa/main/Фото%20колокольчик.jpg" alt="Колокольчик">
+                    <p>Колокольчик</p>
+                    <audio id="bell" src="https://raw.githubusercontent.com/stepatarkhanov-oss/aaa/main/текст%20колокольчика.mp3"></audio>
+                </div>
+                <div class="card" onclick="playVoice('elara')">
+                    <img src="https://raw.githubusercontent.com/stepatarkhanov-oss/aaa/main/Фото%20Элара.png" alt="Элара">
+                    <p>Элара</p>
+                    <audio id="elara" src="https://raw.githubusercontent.com/stepatarkhanov-oss/aaa/main/Текст%20элары.mp3"></audio>
+                </div>
+                <div class="card" onclick="playVoice('lira')">
+                    <img src="https://raw.githubusercontent.com/stepatarkhanov-oss/aaa/main/Фото%20Лира.jpg" alt="Лира">
+                    <p>Лира</p>
+                    <audio id="lira" src="https://raw.githubusercontent.com/stepatarkhanov-oss/aaa/main/Текст%20лиры.mp3"></audio>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        /* --- JS ЛОГИКА --- */
+        const bgMusic = document.getElementById('bg-music');
+        const bgBtn = document.getElementById('play-bg');
+        const welcomeOverlay = document.getElementById('welcome-overlay');
+        const startBtn = document.getElementById('start-btn');
+
+        const DEFAULT_BG_VOL = 0.3;
+        const DIMMED_BG_VOL = 0.1;
+
+        bgMusic.volume = DEFAULT_BG_VOL;
+
+        // Логика кнопки входа
+        startBtn.addEventListener('click', () => {
+            welcomeOverlay.style.opacity = '0';
+            setTimeout(() => {
+                welcomeOverlay.style.display = 'none';
+                bgMusic.play();
+            }, 1000);
+        });
+
+        // Управление фоном
+        bgBtn.addEventListener('click', () => {
+            if (bgMusic.paused) {
+                bgMusic.play();
+                bgBtn.textContent = "守 Пауза музыки";
+            } else {
+                bgMusic.pause();
+                bgBtn.textContent = "▶ Включить музыку";
+            }
+        });
+
+        // Логика озвучки
+        function playVoice(id) {
+            const activeVoice = document.getElementById(id);
+            const parentCard = activeVoice.parentElement;
+
+            if (!activeVoice.paused) {
+                activeVoice.pause();
+                activeVoice.currentTime = 0;
+                parentCard.classList.remove('playing');
+                bgMusic.volume = DEFAULT_BG_VOL;
+                return;
+            }
+
+            // Остановить другие звуки
+            document.querySelectorAll('audio:not(#bg-music)').forEach(v => {
+                v.pause();
+                v.currentTime = 0;
+            });
+            document.querySelectorAll('.card').forEach(c => c.classList.remove('playing'));
+
+            // Приглушить фон и включить голос
+            bgMusic.volume = DIMMED_BG_VOL;
+            activeVoice.play();
+            parentCard.classList.add('playing');
+
+            activeVoice.onended = () => {
+                parentCard.classList.remove('playing');
+                bgMusic.volume = DEFAULT_BG_VOL;
+            };
+        }
+    </script>
+</body>
+</html>
